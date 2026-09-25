@@ -9,11 +9,11 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {  //Builds the main app widget
     return MaterialApp(
       title: 'Water Falls!',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, secondary: const Color.fromARGB(255, 68, 190, 255), tertiary: const Color.fromARGB(255, 71, 68, 255)),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
       home: const MainScreen(),
@@ -25,13 +25,14 @@ class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { //Builds the main screen widget
     return ScreenTemplate(
-      title: 'Main Screen',
+      title: 'Water Falls!',
+      text: 'Water Falls!: A Water Flow Simulation Game',
       color: Colors.blue,
       mainAxisAlignment: MainAxisAlignment.center,
       buttons: [
-        buildNavButton(context, 'New Game', const NewGame()),
+        buildNavButton(context, 'New Game', const GameGrid()),
         buildNavButton(context, 'How To Play', const HowToScreen()),
         buildNavButton(context, 'About the Project', const AboutPage()),
       ],
@@ -39,24 +40,7 @@ class MainScreen extends StatelessWidget {
   }
 }
 
-class NewGame extends StatelessWidget {
-  const NewGame({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ScreenTemplate(
-      title: 'Item Select',
-      color: Colors.blue,
-      mainAxisAlignment: MainAxisAlignment.center,
-      buttons: [
-        buildNavButton(context, 'Game Grid', const GameGrid()),
-        buildNavButton(context, 'Main Menu', const MainScreen()),
-      ],
-    );
-  }
-}
-
-class GameGrid extends StatelessWidget {
+class GameGrid extends StatelessWidget {  //Builds the game grid widget
   const GameGrid({super.key});
   @override
   Widget build(BuildContext context) {
@@ -64,13 +48,15 @@ class GameGrid extends StatelessWidget {
   }
 }
 
+
 class HowToScreen extends StatelessWidget {
   const HowToScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { // Builds the how to play screen widget
     return ScreenTemplate(
-      title: 'How To Play',
+      title: 'How to Play',
+      text: 'Welcome to Water Falls! In this game, you can place different items on the grid to create a water flow simulation. Use the controls to add or remove items and watch how the water interacts with them. Have fun experimenting and creating your own water flow scenarios! There are 3 different items to choose from: Water, Dirt, and Air. Water will flow downwards and spread out, Dirt will block the flow of water, and Air will allow water to pass through and overide a block. Enjoy the game!',
       color: Colors.blue,
       mainAxisAlignment: MainAxisAlignment.center,
       buttons: [
@@ -80,13 +66,14 @@ class HowToScreen extends StatelessWidget {
   }
 }
 
-class AboutPage extends StatelessWidget {
+class AboutPage extends StatelessWidget { // Builds the about page widget
   const AboutPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ScreenTemplate(
       title: 'About the Project',
+      text:'This project was created by a team of students as a part of the mobile software development course. The goal of this project was to create a fun game using Terraria inspired water mechanics and flow simulation. While this is far from perfect, we hope that you get some enjoyment out of experimenting with our game. If you have any ideas for improvements please let us know. Have fun and enjoy the game!',
       color: Colors.blue,
       mainAxisAlignment: MainAxisAlignment.center,
       buttons: [
@@ -96,7 +83,7 @@ class AboutPage extends StatelessWidget {
   }
 }
 
-Widget buildNavButton(BuildContext context, String label, Widget destination) {
+Widget buildNavButton(BuildContext context, String label, Widget destination) { // Builds a navigation button widget which creates all of the needed elevated buttons for this code.
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 8.0),
     child: ElevatedButton(
@@ -105,15 +92,16 @@ Widget buildNavButton(BuildContext context, String label, Widget destination) {
           context,
           MaterialPageRoute(builder: (context) => destination),
         );
-      },
-      child: Text(label), key: Key(label),
+      }, key: Key(label),
+      child: Text(label),
     ),
   );
 }
 
-class ScreenTemplate extends StatelessWidget {
-  final String title;
+class ScreenTemplate extends StatelessWidget { //sets the template for the screens.
+  final String text;
   final Color color;
+  final String title;
   final List<Widget> buttons;
   final MainAxisAlignment mainAxisAlignment;
 
@@ -121,33 +109,45 @@ class ScreenTemplate extends StatelessWidget {
   const ScreenTemplate({
     super.key,
     required this.title,
+    required this.text,
     required this.color,
     required this.buttons,
     this.mainAxisAlignment = MainAxisAlignment.center,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {   //Builds the screens
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
+        titleTextStyle: const TextStyle(
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
+          color: Color.fromARGB(255, 31, 27, 245),
+        ),
         backgroundColor: color,
-        foregroundColor: Colors.white,
+        foregroundColor: const Color.fromARGB(255, 168, 235, 247),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: mainAxisAlignment,
           children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                text,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 31, 27, 245),
+                  height: 2.0,
+                ),
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 40),
             ...buttons,
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
           ],
         ),
       ),
