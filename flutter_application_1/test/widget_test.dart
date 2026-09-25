@@ -62,4 +62,32 @@ void main() {
 
     expect(find.byType(MainScreen), findsOneWidget);
   });
+
+  testWidgets('How To Play allows return to Main Screen', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const MyApp());
+
+    await tester.tap(find.byKey(Key('How To Play')));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(Key('Main Menu')));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(MainScreen), findsOneWidget);
+  });
+
+  testWidgets('New Game allows return to Main Screen', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const MyApp());
+
+    await tester.tap(find.byKey(Key('New Game')));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(Key('Main Menu')));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(MainScreen), findsOneWidget);
+  });
 }

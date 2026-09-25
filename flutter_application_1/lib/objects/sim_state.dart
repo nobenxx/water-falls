@@ -29,7 +29,7 @@ class GameState {
     // if (body.length > snakeLength) body.removeAt(0);
     direction = newDirection ?? direction;
 
-    fluid.simulate(0.01, direction.x, direction.y, 4);
+    fluid.simulate(0.03, direction.x, direction.y, 4);
     // iterations += 1;
   }
 
@@ -49,7 +49,7 @@ class GameState {
     final brushRadius = fluid.h * 4;
 
     if (tap == Tap.water) {
-      fluid.addWater(x, y, brushRadius, 1);
+      fluid.addWater(x, y, brushRadius * 1.5, 1);
     } else if (tap == Tap.solid) {
       fluid.addCircle(x, y, brushRadius, true);
     } else if (tap == Tap.air) {
