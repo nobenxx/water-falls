@@ -71,10 +71,15 @@ class Fluid {
 
     for (int i = 1; i < numX - 1; i++) {
       for (int j = 1; j < numY - 1; j++) {
-        if (s[i * n + j] != 0.0) {
-          v[i * n + j] += gravityY * dt;
-          u[i * n + j] += gravityX * dt;
-        }
+        // only apply gravity to faces between two fluid cells
+        // faces touching a solid wall are never corrected by the pressure solver or advection
+        // so adding gravity there made their velocity grow every step and the simulation sped up over time
+        if (s[i * n + j] != 0.0 && s[i * n + j - 1] != 0.0) {
+        v[i * n + j] += gravityY * dt;
+      }
+      if (s[i * n + j] != 0.0 && s[(i - 1) * n + j] != 0.0) {
+        u[i * n + j] += gravityX * dt;
+      }
       }
     }
   }

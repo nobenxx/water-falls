@@ -45,9 +45,16 @@ class SnakeBoardPainter extends CustomPainter {
   GameState? state;
   double cellSize;
 
+  // paint-call counter and running total (ms)
+  static int _paintCount = 0;
+  static int _paintMicros = 0;
+
   @override
   void paint(Canvas canvas, Size size) {
     final blackLine = Paint()..color = Colors.black;
+
+    final sw = Stopwatch()..start();
+
     // final blackFilled = Paint()
     //   ..color = Colors.black
     //   ..style = PaintingStyle.fill;
@@ -78,6 +85,14 @@ class SnakeBoardPainter extends CustomPainter {
         canvas.drawRect(Rect.fromPoints(a, b), colorfilled);
       }
     }
+
+    // print the average every 10 paints
+    sw.stop();
+    _paintMicros += sw.elapsedMicroseconds;
+    _paintCount++;
+    if (_paintCount % 10 == 0) {
+      debugPrint('TIMING paint(): avg ${(_paintMicros / _paintCount / 1000).toStringAsFixed(1)} ms over $_paintCount paints');
+    }
   }
 
   @override
@@ -102,6 +117,10 @@ class SnakeState extends State<Snake> {
     _timer.cancel();
   }
 
+  // step-call counter and running total (microseconds)
+  int _stepCount = 0;
+  int _stepMicros = 0;
+
   @override
   void initState() {
     super.initState();
@@ -113,7 +132,7 @@ class SnakeState extends State<Snake> {
       });
     });
 
-    _timer = Timer.periodic(const Duration(milliseconds: 200), (_) {
+    _timer = Timer.periodic(const Duration(milliseconds: 50), (_) {
       setState(() {
         _step();
       });
@@ -129,6 +148,14 @@ class SnakeState extends State<Snake> {
         ? math.Point<double>(0, acceleration!.y.sign.toDouble())
         : math.Point<double>(-acceleration!.x.sign.toDouble(), 0);
     state!.step(newDirection);
+    sw.stop();
+
+    // print ave of 10 steps
+    _stepMicros += sw.elapsedMicroseconds;
+    _stepCount++;
+    if (_stepCount % 10 == 0) {
+      debugPrint('TIMING step(): avg ${(_stepMicros / _stepCount / 1000).toStringAsFixed(1)} ms over $_stepCount steps');
+    }
   }
 
   // places the selected block (water, dirt or air) at the finger's position.
